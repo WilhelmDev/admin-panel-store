@@ -1,12 +1,32 @@
 "use client";
-import Link from "next/link";
-import { Grid, Box, Card, Stack, Typography } from "@mui/material";
+import { Grid, Box, Card, Stack, Typography, Button } from "@mui/material";
+import { Google as GoogleIcon } from '@mui/icons-material';
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { useRouter } from "next/navigation";
 // components
+import useFirebase from "@/hooks/useFirebase";
 import PageContainer from "@/app/(DashboardLayout)/components/container/PageContainer";
 import Logo from "@/app/(DashboardLayout)/layout/shared/logo/Logo";
 import AuthLogin from "../auth/AuthLogin";
+import routes from "@/utils/routes";
 
 const Login2 = () => {
+
+  const { app } = useFirebase();
+  const router = useRouter();
+  const auth = getAuth(app);
+
+  const handleGoogleSignIn = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(auth, provider);
+      router.push(routes.home);
+    } catch (error) {
+      console.error("Error during Google sign in:", error);
+      // Aquí puedes manejar los errores, como mostrar un mensaje al usuario
+    }
+  };
+
   return (
     <PageContainer title="Login" description="this is Login page">
       <Box
@@ -60,7 +80,7 @@ const Login2 = () => {
                 }
                 subtitle={
                   <Stack
-                    direction="row"
+                    direction="column"
                     spacing={1}
                     justifyContent="center"
                     mt={3}
@@ -69,20 +89,18 @@ const Login2 = () => {
                       color="textSecondary"
                       variant="h6"
                       fontWeight="500"
+                      style={{ textAlign: "center" }}
                     >
-                      New to Modernize?
+                      or
                     </Typography>
-                    <Typography
-                      component={Link}
-                      href="/authentication/register"
-                      fontWeight="500"
-                      sx={{
-                        textDecoration: "none",
-                        color: "primary.main",
-                      }}
+                    <Button
+                      variant="outlined"
+                      startIcon={<GoogleIcon />}
+                      onClick={handleGoogleSignIn}
+                      fullWidth
                     >
-                      Create an account
-                    </Typography>
+                      Sign in with Google
+                    </Button>
                   </Stack>
                 }
               />
