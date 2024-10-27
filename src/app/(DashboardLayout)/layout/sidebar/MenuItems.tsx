@@ -1,3 +1,4 @@
+import routes from "@/utils/routes";
 import {
   IconAperture,
   IconCopy,
@@ -6,6 +7,8 @@ import {
   IconMoodHappy,
   IconTypography,
   IconUserPlus,
+  IconCirclePlus,
+  IconCategory
 } from "@tabler/icons-react";
 
 import { uniqueId } from "lodash";
@@ -20,11 +23,17 @@ const Menuitems = [
     id: uniqueId(),
     title: "Dashboard",
     icon: IconLayoutDashboard,
-    href: "/",
+    href: routes.home,
   },
   {
     navlabel: true,
-    subheader: "Utilities",
+    subheader: "Productos",
+  },
+  {
+    id: uniqueId(),
+    title: "Nuevo Producto",
+    icon: IconCirclePlus,
+    href: routes.newProduct,
   },
   {
     id: uniqueId(),
@@ -40,19 +49,13 @@ const Menuitems = [
   },
   {
     navlabel: true,
-    subheader: "Auth",
+    subheader: "Categorias",
   },
   {
     id: uniqueId(),
-    title: "Login",
-    icon: IconLogin,
-    href: "/authentication/login",
-  },
-  {
-    id: uniqueId(),
-    title: "Register",
-    icon: IconUserPlus,
-    href: "/authentication/register",
+    title: "Nueva Categoria",
+    icon: IconCategory,
+    href: routes.newProduct,
   },
   {
     navlabel: true,
