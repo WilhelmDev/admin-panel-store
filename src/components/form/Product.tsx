@@ -1,11 +1,15 @@
-import { Avatar, Box, Button, Grid, IconButton, MenuItem, TextField, Typography } from '@mui/material'
+import { Avatar, Box, Button, CircularProgress, Grid, IconButton, MenuItem, TextField, Typography } from '@mui/material'
 import React, { useRef, useState } from 'react'
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import { IconPhotoUp } from '@tabler/icons-react';
+import { ProductPayload } from '@/interfaces/product';
 
-type Props = {}
+type Props = {
+  callbackProduct: (product: ProductPayload) => void;
+  loading: boolean;
+}
 
-export default function ProductForm({}: Props) {
+export default function ProductForm({ callbackProduct, loading }: Props) {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -15,7 +19,6 @@ export default function ProductForm({}: Props) {
     name: '',
     description: '',
     price: '',
-    stock: '',
     category: '',
   });
 
@@ -37,8 +40,12 @@ export default function ProductForm({}: Props) {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Aquí puedes manejar el envío del formulario
-    console.log(product);
+    const payload = {
+      ...product,
+      price: parseFloat(product.price),
+      image: image || '',
+    }
+    callbackProduct(payload);
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,7 +64,7 @@ export default function ProductForm({}: Props) {
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+    <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
       <input
         type="file"
         accept="image/*"
@@ -114,11 +121,10 @@ export default function ProductForm({}: Props) {
             required
             fullWidth
             id="name"
-            label="Product Name"
+            label="Nombre del producto"
             name="name"
             value={product.name}
             onChange={handleChange}
-
           />
         </Grid>
         <Grid item xs={12}>
@@ -126,7 +132,7 @@ export default function ProductForm({}: Props) {
             required
             fullWidth
             id="description"
-            label="Description"
+            label="Descripción"
             name="description"
             multiline
             rows={4}
@@ -139,7 +145,7 @@ export default function ProductForm({}: Props) {
             required
             fullWidth
             id="price"
-            label="Price"
+            label="Precio"
             name="price"
             type="number"
             value={product.price}
@@ -151,23 +157,11 @@ export default function ProductForm({}: Props) {
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
-            required
-            fullWidth
-            id="stock"
-            label="Stock"
-            name="stock"
-            type="number"
-            value={product.stock}
-            onChange={handleChange}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
             select
             required
             fullWidth
             id="category"
-            label="Category"
+            label="Categoría"
             name="category"
             value={product.category}
             onChange={handleChange}
@@ -184,9 +178,12 @@ export default function ProductForm({}: Props) {
         type="submit"
         fullWidth
         variant="contained"
-        sx={{ mt: 3, mb: 2 }}
+        disabled={loading}
+        sx={{ mt: 3, mb: 2, py: 2, ':disabled': { opacity: 0.5  }}}
       >
-        Add Product
+        {loading 
+          ? <Box alignContent={'center'} alignItems={'center'}><CircularProgress size={30} /></Box> 
+          : 'Añadir producto' }
       </Button>
     </Box>
   )
