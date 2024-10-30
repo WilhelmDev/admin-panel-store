@@ -8,7 +8,8 @@ import {
   IconTypography,
   IconUserPlus,
   IconCirclePlus,
-  IconCategory
+  IconCategory,
+  IconList
 } from "@tabler/icons-react";
 
 import { uniqueId } from "lodash";
@@ -28,6 +29,12 @@ const Menuitems = [
   {
     navlabel: true,
     subheader: "Productos",
+  },
+  {
+    id: uniqueId(),
+    title: "Todos",
+    icon: IconList,
+    href: routes.products,
   },
   {
     id: uniqueId(),
