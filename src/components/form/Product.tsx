@@ -44,6 +44,7 @@ export default function ProductForm({ callbackProduct, loading }: Props) {
       ...product,
       price: parseFloat(product.price),
       image: image || '',
+      active: false,
     }
     callbackProduct(payload);
   };
